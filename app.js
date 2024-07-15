@@ -4,6 +4,7 @@ const express = require("express");
 const bookPath = require('./Routes/books')
 const authorsPath = require('./Routes/authors');
 const authPath = require('./Routes/auth');
+const userPath = require('./Routes/user');
 const mongoose = require('mongoose');
 const logger = require("./middlewares/Logger")
 const errorHandler = require("./middlewares/error")
@@ -23,13 +24,14 @@ app.use(logger)
 app.use('/api/books', bookPath)
 app.use('/api/authors', authorsPath)
 app.use('/api/auth', authPath)
+app.use('/api/user', userPath)
 
 //error handle middleware
-// app.use((req,res,next) => {
-//     const error = new Error(`Not found - ${req.originalUrl}`);
-//     res.status(404);
-//     next(error)
-// })
+app.use((req,res,next) => {
+    const error = new Error(`Not found - ${req.originalUrl}`);
+    res.status(404);
+    next(error)
+})
 
 app.use(errorHandler);
 

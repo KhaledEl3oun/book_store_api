@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken')
 /**
  * @desc    register new user
  * @route   /api/auth/register
- * @method  post
+ * @method  POST
  * @access  public
  */
 router.post("/register",asyncHandler(async(req,res) => {
@@ -30,14 +30,20 @@ router.post("/register",asyncHandler(async(req,res) => {
         email:req.body.email,
         userName:req.body.userName,
         password:req.body.password,
-        isAdmin: req.body.isAdmin,
     })
    const result = await user.save();
-   const token = jwt.sign({id:user._id, userName:user.userName}, "secretKey");
+   const token = jwt.sign({id:user._id, isAdmin:user.isAdmin}, "secretKey");
    const {password , ...other} = result._doc;
    res.status(201).json({token, ...other})
 }));
 
+
+/**
+ * @desc    login user
+ * @route   /api/auth/login
+ * @method  POST
+ * @access  public
+ */
 router.post("/login", asyncHandler(async(req, res) => {
     const  {error} = validateLoginUser(req.body);
     if (error) {
